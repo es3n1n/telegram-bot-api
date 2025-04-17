@@ -1,0 +1,22 @@
+--- a/td/telegram/MessageContent.cpp
++++ b/td/telegram/MessageContent.cpp
+@@ -3398,8 +3398,18 @@ static Result<InputMessageContent> create_input_message_content(
+     file_view = td->file_manager_->get_file_view(file_id);
+     auto suggested_path = file_view.suggested_path();
+     const PathView path_view(suggested_path);
++    const auto extension = path_view.extension();
+     file_name = path_view.file_name().str();
+-    mime_type = MimeType::from_extension(path_view.extension());
++
++    if (extension == "vorbis") {
++      mime_type = "audio/vorbis";
++      // Replace .vorbis extension with .ogg
++      if (const auto pos = file_name.rfind(".vorbis"); pos != std::string::npos) {
++        file_name.replace(pos, 7, ".ogg");
++      }
++    } else {
++      mime_type = MimeType::from_extension(extension);
++    }
+   }
+ 
+   bool disable_web_page_preview = false;
