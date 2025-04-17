@@ -62,12 +62,12 @@ jobs:
     strategy:
       matrix:
         arch:
-          # - linux/386
+          - linux/386
           - linux/amd64
-          # - linux/arm/v6
-          # - linux/arm/v7
-          # - linux/arm64
-          # - linux/ppc64le
+          - linux/arm/v6
+          - linux/arm/v7
+          - linux/arm64
+          - linux/ppc64le
 
     steps:
       - name: Checkout current repo
@@ -172,7 +172,17 @@ jobs:
           docker image ls "$IMAGE_TAG"
           
           docker buildx imagetools create -t "$IMAGE_TAG:$VERSION" \
-            "$IMAGE_TAG:$VERSION-linux-amd64"
+            "$IMAGE_TAG:$VERSION-linux-386" \
+            "$IMAGE_TAG:$VERSION-linux-amd64" \
+            "$IMAGE_TAG:$VERSION-linux-arm-v6" \
+            "$IMAGE_TAG:$VERSION-linux-arm-v7" \
+            "$IMAGE_TAG:$VERSION-linux-arm64" \
+            "$IMAGE_TAG:$VERSION-linux-ppc64le"
           
           docker buildx imagetools create -t "$IMAGE_TAG:latest" \
-            "$IMAGE_TAG:$VERSION-linux-amd64"
+            "$IMAGE_TAG:$VERSION-linux-386" \
+            "$IMAGE_TAG:$VERSION-linux-amd64" \
+            "$IMAGE_TAG:$VERSION-linux-arm-v6" \
+            "$IMAGE_TAG:$VERSION-linux-arm-v7" \
+            "$IMAGE_TAG:$VERSION-linux-arm64" \
+            "$IMAGE_TAG:$VERSION-linux-ppc64le"
